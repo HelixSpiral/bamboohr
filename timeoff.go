@@ -2,7 +2,6 @@ package bamboohr
 
 import (
 	"fmt"
-	"net/http"
 	"time"
 )
 
@@ -14,34 +13,14 @@ func (b *Client) ListTimeOffTypes(request bool) ([]byte, error) {
 		endpointURL += "/?mode=request"
 	}
 
-	req, err := http.NewRequest("GET", endpointURL, nil)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	resp, err := b.sendRequest(req)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return resp, nil
+	return b.getRequest(endpointURL)
 }
 
 // ListTimeOffPolicies lists the time off policies
 func (b *Client) ListTimeOffPolicies() ([]byte, error) {
 	endpointURL := fmt.Sprintf("%s/meta/time_off/policies", b.APIEndpoint)
 
-	req, err := http.NewRequest("GET", endpointURL, nil)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	resp, err := b.sendRequest(req)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return resp, nil
+	return b.getRequest(endpointURL)
 }
 
 // ListTimeOffRequests lists the timeoff requests
@@ -68,51 +47,21 @@ func (b *Client) ListTimeOffRequests(start, end time.Time, args map[string]inter
 		endpointURL += fmt.Sprintf("&status=%s", status)
 	}
 
-	req, err := http.NewRequest("GET", endpointURL, nil)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	resp, err := b.sendRequest(req)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return resp, nil
+	return b.getRequest(endpointURL)
 }
 
 // ListTimeOffPoliciesForEmployee lists the time off policies for a specific employee
 func (b *Client) ListTimeOffPoliciesForEmployee(id string) ([]byte, error) {
 	endpointURL := fmt.Sprintf("%s/employees/%s/time_off/policies", b.APIEndpoint, id)
 
-	req, err := http.NewRequest("GET", endpointURL, nil)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	resp, err := b.sendRequest(req)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return resp, nil
+	return b.getRequest(endpointURL)
 }
 
 // EstimateFutureTimeOffBalance estimates the future time off balance for an employee
 func (b *Client) EstimateFutureTimeOffBalance(id string, end time.Time) ([]byte, error) {
 	endpointURL := fmt.Sprintf("%s/employees/%s/time_off/calculator?end=%s", b.APIEndpoint, id, end.String())
 
-	req, err := http.NewRequest("GET", endpointURL, nil)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	resp, err := b.sendRequest(req)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return resp, nil
+	return b.getRequest(endpointURL)
 }
 
 // ListWhosOut lists the employees out for the specified dates
@@ -126,15 +75,5 @@ func (b *Client) ListWhosOut(args map[string]time.Time) ([]byte, error) {
 		endpointURL += fmt.Sprintf("&end=%s", endDate.Format("2006-01-02"))
 	}
 
-	req, err := http.NewRequest("GET", endpointURL, nil)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	resp, err := b.sendRequest(req)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return resp, nil
+	return b.getRequest(endpointURL)
 }

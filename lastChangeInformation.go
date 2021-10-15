@@ -2,7 +2,6 @@ package bamboohr
 
 import (
 	"fmt"
-	"net/http"
 	"time"
 )
 
@@ -17,15 +16,5 @@ func (b *Client) ListAllUpdatedEmployeeIds(since time.Time, tType string) ([]byt
 	}
 	endpointURL := fmt.Sprintf("%s/employees/changed?since=%s&type=%s", b.APIEndpoint, since.Format(time.RFC3339), tType)
 
-	req, err := http.NewRequest("GET", endpointURL, nil)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	resp, err := b.sendRequest(req)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return resp, nil
+	return b.getRequest(endpointURL)
 }

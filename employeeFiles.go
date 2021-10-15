@@ -2,7 +2,6 @@ package bamboohr
 
 import (
 	"fmt"
-	"net/http"
 )
 
 // ListFilesByEmployee will list all the files a given employee has in their account
@@ -13,17 +12,7 @@ func (b *Client) ListFilesByEmployee(args map[string]interface{}) ([]byte, error
 
 	endpointURL := fmt.Sprintf("%s/%s/%s/files/view", b.APIEndpoint, "employees", args["employeeid"])
 
-	req, err := http.NewRequest("GET", endpointURL, nil)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	resp, err := b.sendRequest(req)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return resp, nil
+	return b.getRequest(endpointURL)
 }
 
 // GetFileFromEmployee will get a specified file from an employee
@@ -38,15 +27,5 @@ func (b *Client) GetFileFromEmployee(args map[string]interface{}) ([]byte, error
 
 	endpointURL := fmt.Sprintf("%s/%s/%s/files/%s", b.APIEndpoint, "employees", args["employeeid"], args["fileid"])
 
-	req, err := http.NewRequest("GET", endpointURL, nil)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	resp, err := b.sendRequest(req)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return resp, err
+	return b.getRequest(endpointURL)
 }

@@ -2,7 +2,6 @@ package bamboohr
 
 import (
 	"fmt"
-	"net/http"
 )
 
 // GetEmployeePhoto
@@ -18,15 +17,5 @@ func (b *Client) GetEmployeePhoto(id, size string) ([]byte, error) {
 	}
 	endpointURL := fmt.Sprintf("%s/employees/%s/photo/%s", b.APIEndpoint, id, size)
 
-	req, err := http.NewRequest("GET", endpointURL, nil)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	resp, err := b.sendRequest(req)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return resp, nil
+	return b.getRequest(endpointURL)
 }

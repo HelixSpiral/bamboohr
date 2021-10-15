@@ -61,3 +61,18 @@ func (b *Client) sendRequest(req *http.Request) ([]byte, error) {
 
 	return body, err
 }
+
+// getRequest abstraction
+func (b *Client) getRequest(endpointURL string) ([]byte, error) {
+	req, err := http.NewRequest("GET", endpointURL, nil)
+	if err != nil {
+		return []byte{}, err
+	}
+
+	resp, err := b.sendRequest(req)
+	if err != nil {
+		return []byte{}, err
+	}
+
+	return resp, nil
+}
