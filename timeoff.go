@@ -79,14 +79,14 @@ func (b *Client) EstimateFutureTimeOffBalance(id string, end time.Time) ([]byte,
 }
 
 // ListWhosOut lists the employees out for the specified dates
-func (b *Client) ListWhosOut(args map[string]interface{}) ([]byte, error) {
+func (b *Client) ListWhosOut(args map[string]time.Time) ([]byte, error) {
 	endpointURL := fmt.Sprintf("%s/time_off/whos_out/", b.APIEndpoint)
 	if startDate, ok := args["start"]; !ok {
-		endpointURL += fmt.Sprintf("?start=%s", startDate)
+		endpointURL += fmt.Sprintf("?start=%s", startDate.Format("2006-01-02"))
 	}
 
 	if endDate, ok := args["end"]; !ok {
-		endpointURL += fmt.Sprintf("&end=%s", endDate)
+		endpointURL += fmt.Sprintf("&end=%s", endDate.Format("2006-01-02"))
 	}
 
 	req, err := http.NewRequest("GET", endpointURL, nil)
