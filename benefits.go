@@ -18,7 +18,7 @@ func (b *Client) ListBenefitCoverage() ([]byte, error) {
 
 // GetBenefitCoverage gets the benefit coverage for a specific employee
 func (b *Client) GetBenefitCoverage(id string) ([]byte, error) {
-	endpointURL := fmt.Sprintf("%s/benefitcoverage/%s", b.APIEndpoint, id)
+	endpointURL := fmt.Sprintf("%s/benefitcoverages/%s", b.APIEndpoint, id)
 
 	return b.getRequest(endpointURL)
 }

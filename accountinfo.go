@@ -6,7 +6,7 @@ import (
 
 // ListFields lists all the metadata fields your account has
 func (b *Client) ListFields() ([]byte, error) {
-	endpointURL := fmt.Sprintf("%s/meta/field", b.APIEndpoint)
+	endpointURL := fmt.Sprintf("%s/meta/fields", b.APIEndpoint)
 
 	return b.getRequest(endpointURL)
 }
