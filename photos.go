@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// GetEmployeePhoto
+// GetEmployeePhoto gets an employee photo
 func (b *Client) GetEmployeePhoto(id, size string) ([]byte, error) {
 	switch size {
 	case "original":
