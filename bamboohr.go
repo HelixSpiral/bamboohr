@@ -44,6 +44,9 @@ func (b *Client) sendRequest(req *http.Request) ([]byte, error) {
 	req.SetBasicAuth(b.APIKey, "x")
 
 	resp, err := b.HTTPClient.Do(req)
+	if resp != nil {
+		defer resp.Body.Close() // This panics if body is nil, so we have to have the check first.
+	}
 	if err != nil {
 		return []byte{}, err
 	}
@@ -56,8 +59,6 @@ func (b *Client) sendRequest(req *http.Request) ([]byte, error) {
 	if err != nil {
 		return []byte{}, err
 	}
-
-	defer resp.Body.Close()
 
 	return body, err
 }
