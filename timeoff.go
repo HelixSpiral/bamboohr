@@ -23,28 +23,41 @@ func (b *Client) ListTimeOffPolicies() ([]byte, error) {
 	return b.getRequest(endpointURL)
 }
 
+// BBHRListTimeOffRequestsInput is used as input for the ListTimeOffRequests function
+type BBHRListTimeOffRequestsInput struct {
+	Start time.Time
+	End   time.Time
+
+	TimeOffID  string
+	EmployeeID string
+
+	Action string
+	Status string
+	Type   string
+}
+
 // ListTimeOffRequests lists the timeoff requests
-func (b *Client) ListTimeOffRequests(start, end time.Time, args map[string]interface{}) ([]byte, error) {
-	endpointURL := fmt.Sprintf("%s/time_off/requests/?start=%s&end=%s", b.APIEndpoint, start.Format("2006-01-02"), end.Format("2006-01-02"))
+func (b *Client) ListTimeOffRequests(args BBHRListTimeOffRequestsInput) ([]byte, error) {
+	endpointURL := fmt.Sprintf("%s/time_off/requests/?start=%s&end=%s", b.APIEndpoint, args.Start.Format("2006-01-02"), args.End.Format("2006-01-02"))
 
-	if id, ok := args["id"]; ok {
-		endpointURL += fmt.Sprintf("&id=%s", id)
+	if args.TimeOffID != "" {
+		endpointURL += fmt.Sprintf("&id=%s", args.TimeOffID)
 	}
 
-	if action, ok := args["action"]; ok {
-		endpointURL += fmt.Sprintf("&action=%s", action)
+	if args.Action != "" {
+		endpointURL += fmt.Sprintf("&action=%s", args.Action)
 	}
 
-	if empId, ok := args["employeeid"]; ok {
-		endpointURL += fmt.Sprintf("&employeeId=%s", empId)
+	if args.EmployeeID != "" {
+		endpointURL += fmt.Sprintf("&employeeId=%s", args.EmployeeID)
 	}
 
-	if tType, ok := args["type"]; ok {
-		endpointURL += fmt.Sprintf("&type=%s", tType)
+	if args.Type != "" {
+		endpointURL += fmt.Sprintf("&type=%s", args.Type)
 	}
 
-	if status, ok := args["status"]; ok {
-		endpointURL += fmt.Sprintf("&status=%s", status)
+	if args.Status != "" {
+		endpointURL += fmt.Sprintf("&status=%s", args.Status)
 	}
 
 	return b.getRequest(endpointURL)
