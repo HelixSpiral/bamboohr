@@ -4,19 +4,26 @@ import (
 	"fmt"
 )
 
+// BBHRGetCompanayReportInput is used as input for the GetCompanyReport function
+type BBHRGetCompanyReportInput struct {
+	ReportID string
+	Format   string
+	FD       string
+}
+
 // GetCompanyReport gets a company report
-func (b *Client) GetCompanyReport(args map[string]string) ([]byte, error) {
-	if _, ok := args["id"]; !ok {
-		return []byte{}, fmt.Errorf("missing arg: id")
+func (b *Client) GetCompanyReport(args BBHRGetCompanyReportInput) ([]byte, error) {
+	if args.ReportID == "" {
+		return []byte{}, fmt.Errorf("missing arg: ReportID")
 	}
 
-	endpointURL := fmt.Sprintf("%s/reports/%s", b.APIEndpoint, args["id"])
+	endpointURL := fmt.Sprintf("%s/reports/%s", b.APIEndpoint, args.ReportID)
 
-	if _, ok := args["format"]; !ok {
-		return []byte{}, fmt.Errorf("missing arg: format")
+	if args.Format == "" {
+		return []byte{}, fmt.Errorf("missing arg: Format")
 	}
 
-	switch args["format"] {
+	switch args.Format {
 	case "csv":
 	case "pdf":
 	case "xls":
@@ -26,10 +33,10 @@ func (b *Client) GetCompanyReport(args map[string]string) ([]byte, error) {
 		return []byte{}, fmt.Errorf("arg 'format' must be one of: csv, pdf, xls, xml, json")
 	}
 
-	endpointURL += fmt.Sprintf("&format=%s", args["format"])
+	endpointURL += fmt.Sprintf("&format=%s", args.Format)
 
-	if _, ok := args["fd"]; ok {
-		endpointURL += fmt.Sprintf("&fd=%s", args["fd"])
+	if args.FD != "" {
+		endpointURL += fmt.Sprintf("&fd=%s", args.FD)
 	}
 
 	return b.getRequest(endpointURL)

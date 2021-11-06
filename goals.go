@@ -23,16 +23,27 @@ func (b *Client) ListGoalsForEmployee(id string) ([]byte, error) {
 	return b.getRequest(endpointURL)
 }
 
-// ListAvailableGoalSharingOptions lists the employees with whom the specified employees goals can be shared
-func (b *Client) ListAvailableGoalSharingOptions(id string, args map[string]string) ([]byte, error) {
-	endpointURL := fmt.Sprintf("%s/performance/employees/%s/goals/sharedOptions", b.APIEndpoint, id)
+// BBHRListAvailableGoalSharingOptionsInput is used as input for the ListAvailableGoalSharingOptions function
+type BBHRListAvailableGoalSharingOptionsInput struct {
+	EmployeeID string
+	Search     string
+	Limit      string
+}
 
-	if searchOptions, ok := args["search"]; ok {
-		endpointURL += fmt.Sprintf("&search=%s", searchOptions)
+// ListAvailableGoalSharingOptions lists the employees with whom the specified employees goals can be shared
+func (b *Client) ListAvailableGoalSharingOptions(args BBHRListAvailableGoalSharingOptionsInput) ([]byte, error) {
+	if args.EmployeeID == "" {
+		return []byte{}, fmt.Errorf("missing arg: EmployeeID")
 	}
 
-	if limit, ok := args["limit"]; ok {
-		endpointURL += fmt.Sprintf("&limit=%s", limit)
+	endpointURL := fmt.Sprintf("%s/performance/employees/%s/goals/sharedOptions", b.APIEndpoint, args.EmployeeID)
+
+	if args.Search != "" {
+		endpointURL += fmt.Sprintf("&search=%s", args.Search)
+	}
+
+	if args.Limit != "" {
+		endpointURL += fmt.Sprintf("&limit=%s", args.Limit)
 	}
 
 	return b.getRequest(endpointURL)

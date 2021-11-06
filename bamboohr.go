@@ -13,26 +13,33 @@ type Client struct {
 	HTTPClient  *http.Client
 }
 
+// BBHRNewInput is used as input to the New() function
+type BBHRNewInput struct {
+	Version string
+	Company string
+	APIKey  string
+}
+
 // New creates a new BambooHR API Client and returns it to the caller
-func New(args map[string]interface{}) (*Client, error) {
+func New(args BBHRNewInput) (*Client, error) {
 	newClient := &Client{}
 
-	if _, ok := args["version"]; !ok {
-		args["version"] = "v1"
+	// Default version to v1
+	if args.Version == "" {
+		args.Version = "v1"
 	}
 
-	if _, ok := args["company"]; !ok {
-		return newClient, fmt.Errorf("missing arg: company")
+	if args.Company == "" {
+		return newClient, fmt.Errorf("missing arg: Company")
 	}
 
-	if _, ok := args["apikey"]; !ok {
-		return newClient, fmt.Errorf("missing arg: apikey")
+	if args.APIKey == "" {
+		return newClient, fmt.Errorf("missing arg: APIKey")
 	} else {
-		newClient.APIKey = args["apikey"].(string)
+		newClient.APIKey = args.APIKey
 	}
 
-	newClient.APIEndpoint = fmt.Sprintf("https://api.bamboohr.com/api/gateway.php/%s/%s", args["company"], args["version"])
-
+	newClient.APIEndpoint = fmt.Sprintf("https://api.bamboohr.com/api/gateway.php/%s/%s", args.Company, args.Version)
 	newClient.HTTPClient = http.DefaultClient
 
 	return newClient, nil
