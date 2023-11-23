@@ -5,10 +5,10 @@ An API wrapper for the BambooHR platform
 Create a new client with `bamboohr.New()`
 
 ```go
-bbhr, err := bamboohr.New(map[string]interface{}{
+bbhr, err := bamboohr.New(BBHRNewInput{
   "company": "TestCompany",
   "apikey": "KEYHERE",
-}
+})
 if err != nil {
   panic(err)
 }
